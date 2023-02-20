@@ -30,6 +30,9 @@ public class Main {
         ArrayList<Task> filteredList = fiterTaskListUsingStreams(tasksData, "11");
         System.out.println("\n Filtered lists of tasks");
         printData(filteredList);
+        printDeadlinesUsingStreams(tasksData);
+        System.out.println("Total number of deadlines counted using streams: "
+                + countDeadlines(tasksData));
     }
 
     private static int countDeadlines(ArrayList<Task> tasksData) {
@@ -42,13 +45,28 @@ public class Main {
         return count;
     }
 
+    private static int countDeadlinesUsingStream(ArrayList<Task> tasks){
+        int count = (int)tasks.stream()
+                .filter(t -> t instanceof Deadline)     //filter takes a predicate
+                .count();
+        return count;
+    }
+
     public static void printData(ArrayList<Task> tasksData) {
+        System.out.println("Printing data using iteration");
         for (Task t : tasksData) {
             System.out.println(t);
         }
     }
 
+    public static void printDataUsingStreams(ArrayList<Task> tasks){
+        System.out.println("Printing data using streams");
+        tasks.stream()      //convert to stream
+                .forEach(System.out::println);
+    }
+
     public static void printDeadlines(ArrayList<Task> tasksData) {
+        System.out.println("Printing deadline using iteration");
         for (Task t : tasksData) {
             if (t instanceof Deadline) {
                 System.out.println(t);
@@ -57,6 +75,8 @@ public class Main {
     }
 
     public static void printDeadlinesUsingStreams(ArrayList<Task> tasks) {
+        System.out.println("Printing deadline using streams");
+
         tasks.stream()
                 .filter(t -> t instanceof Deadline)
                 .sorted((a, b) -> a.getDescription().compareToIgnoreCase(b.getDescription()))
